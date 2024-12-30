@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Management Dashboard - SymbiEat</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <nav>
+        <a href="/home" style="text-decoration: none; color: inherit">
+            <div class="logo">SymbiEat Management</div>
+        </a>
+        <div class="profile">
+            <img src="images/default-avatar.svg" alt="Profile" class="profile-img">
+            <div class="dropdown">
+                <a href="/profile" class="dropdown-item">
+                    <i class="fas fa-user"></i>
+                    Profile
+                </a>
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="dashboard">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <i class="fas fa-clock"></i>
+                <div class="stat-info">
+                    <h3>Pending Reservations</h3>
+                    <p class="stat-value">12</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-check-circle"></i>
+                <div class="stat-info">
+                    <h3>Orders Completed Today</h3>
+                    <p class="stat-value">156</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-rupee-sign"></i>
+                <div class="stat-info">
+                    <h3>Today's Revenue</h3>
+                    <p class="stat-value">₹15,640</p>
+                </div>
+            </div>
+        </div>
+
+        <section class="inventory-section">
+            <div class="section-header">
+                <h2>Inventory Management</h2>
+                <button class="add-item-btn">
+                    <i class="fas fa-plus"></i> Add New Item
+                </button>
+            </div>
+            <div class="inventory-grid">
+                <div class="food-card">
+                    <div class="food-image" style="background-image: url('images/food.jpg')"></div>
+                    <div class="food-info">
+                        <h3>Cheese Burger</h3>
+                        <p class="price">₹100</p>
+                        <div class="inventory-controls">
+                            <label>Stock:</label>
+                            <div class="quantity-control">
+                                <button class="qty-btn minus">-</button>
+                                <input type="number" value="45" min="0">
+                                <button class="qty-btn plus">+</button>
+                            </div>
+                        </div>
+                        <button class="update-btn">Update</button>
+                    </div>
+                </div>
+                <div class="food-card">
+                    <div class="food-image" style="background-image: url('images/food.jpg')"></div>
+                    <div class="food-info">
+                        <h3>Margherita Pizza</h3>
+                        <p class="price">₹200</p>
+                        <div class="inventory-controls">
+                            <label>Stock:</label>
+                            <div class="quantity-control">
+                                <button class="qty-btn minus">-</button>
+                                <input type="number" value="60" min="0">
+                                <button class="qty-btn plus">+</button>
+                            </div>
+                        </div>
+                        <button class="update-btn">Update</button>
+                    </div>
+                </div>
+                <div class="food-card">
+                    <div class="food-image" style="background-image: url('images/food.jpg')"></div>
+                    <div class="food-info">
+                        <h3>Chicken Roll</h3>
+                        <p class="price">₹120</p>
+                        <div class="inventory-controls">
+                            <label>Stock:</label>
+                            <div class="quantity-control">
+                                <button class="qty-btn minus">-</button>
+                                <input type="number" value="20" min="0">
+                                <button class="qty-btn plus">+</button>
+                            </div>
+                        </div>
+                        <button class="update-btn">Update</button>
+                    </div>
+                </div>
+                <div class="food-card">
+                    <div class="food-image" style="background-image: url('images/food.jpg')"></div>
+                    <div class="food-info">
+                        <h3>Paneer Sandwich</h3>
+                        <p class="price">₹150</p>
+                        <div class="inventory-controls">
+                            <label>Stock:</label>
+                            <div class="quantity-control">
+                                <button class="qty-btn minus">-</button>
+                                <input type="number" value="30" min="0">
+                                <button class="qty-btn plus">+</button>
+                            </div>
+                        </div>
+                        <button class="update-btn">Update</button>
+                    </div>
+                </div>
+                <!-- More food cards -->
+            </div>
+        </section>
+
+        <section class="orders-section">
+            <h2>Active Orders</h2>
+            <div class="orders-grid">
+                <div class="order-card">
+                    <div class="order-header">
+                        <span class="order-time">4:22 left</span>
+                    </div>
+                    <div class="order-items">
+                        <div class="order-item">
+                            <img src="images/food.jpg" alt="Pizza">
+                            <div class="item-details">
+                                <h4>Margherita Pizza</h4>
+                                <p>2 pc</p>
+                            </div>
+                            <span class="item-price">₹400</span>
+                        </div>
+                    </div>
+                    <div class="order-actions">
+                        <button class="accept-btn">Mark as Served</button>
+                        <button class="cancel-btn">Cancel Order</button>
+                    </div>
+                </div>
+                <div class="order-card">
+                    <div class="order-header">
+                        <span class="order-time">1:49 left</span>
+                    </div>
+                    <div class="order-items">
+                        <div class="order-item">
+                            <img src="images/food.jpg" alt="Pizza">
+                            <div class="item-details">
+                                <h4>Paneer Sandwhich</h4>
+                                <p>3 pc</p>
+                            </div>
+                            <span class="item-price">₹150</span>
+                        </div>
+                    </div>
+                    <div class="order-actions">
+                        <button class="accept-btn">Mark as Served</button>
+                        <button class="cancel-btn">Cancel Order</button>
+                    </div>
+                </div>
+                <div class="order-card">
+                    <div class="order-header">
+                        <span class="order-time">16:08 left</span>
+                    </div>
+                    <div class="order-items">
+                        <div class="order-item">
+                            <img src="images/food.jpg" alt="Pizza">
+                            <div class="item-details">
+                                <h4>Chicken Roll</h4>
+                                <p>1 pc</p>
+                            </div>
+                            <span class="item-price">₹120</span>
+                        </div>
+                    </div>
+                    <div class="order-actions">
+                        <button class="accept-btn">Mark as Served</button>
+                        <button class="cancel-btn">Cancel Order</button>
+                    </div>
+                </div>
+                <!-- More order cards -->
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>Made by <span>Sayantan Nandi</span> (FY CSE Student)</p>
+    </footer>
+
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

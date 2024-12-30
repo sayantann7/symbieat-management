@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Management Profile - SymbiEat</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <nav>
+        <a href="/home" style="text-decoration: none; color: inherit">
+            <div class="logo">SymbiEat Management</div>
+        </a>
+        <div class="profile">
+            <img src="images/default-avatar.svg" alt="Profile" class="profile-img">
+            <div class="dropdown">
+                <a href="/home" class="dropdown-item">
+                    <i class="fas fa-home"></i>
+                    Dashboard
+                </a>
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="profile-main">
+        <div class="profile-header">
+            <img src="images/default-avatar.svg" alt="Profile" class="large-profile-img">
+            <h1>SymbiEat Staff</h1>
+            <p>Staff ID: SYMBIEAT0293297</p>
+        </div>
+
+        <section class="stats-section">
+            <h2>Performance Overview</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-utensils"></i>
+                    <div class="stat-info">
+                        <h3>Orders Processed</h3>
+                        <p>4,359 This Month</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-rupee-sign"></i>
+                    <div class="stat-info">
+                        <h3>This Month's Revenue</h3>
+                        <p>4,68,570</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="activity-section">
+            <h2>Recent Activity</h2>
+            <div class="activity-list">
+                <div class="activity-item">
+                    <div class="activity-icon">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                    <div class="activity-details">
+                        <h3>Updated Inventory</h3>
+                        <p>Added 50 units of Cheese Burger</p>
+                        <span class="activity-time">2 hours ago</span>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="activity-details">
+                        <h3>Order Processed</h3>
+                        <p>Completed order #ORD001</p>
+                        <span class="activity-time">3 hours ago</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>Made by <span>Sayantan Nandi</span> (FY CSE Student)</p>
+    </footer>
+
+    <script src="js/profile.js"></script>
+</body>
+</html>
