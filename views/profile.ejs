@@ -20,7 +20,7 @@
                     <i class="fas fa-home"></i>
                     Dashboard
                 </a>
-                <a href="#" class="dropdown-item">
+                <a href="/logout" class="dropdown-item">
                     <i class="fas fa-sign-out-alt"></i>
                     Logout
                 </a>
@@ -32,7 +32,7 @@
         <div class="profile-header">
             <img src="images/default-avatar.svg" alt="Profile" class="large-profile-img">
             <h1>SymbiEat Staff</h1>
-            <p>Staff ID: SYMBIEAT0293297</p>
+            <p>Staff ID: <%= user.username %></p>
         </div>
 
         <section class="stats-section">
@@ -41,43 +41,39 @@
                 <div class="stat-card">
                     <i class="fas fa-utensils"></i>
                     <div class="stat-info">
-                        <h3>Orders Processed</h3>
-                        <p>4,359 This Month</p>
+                        <h3>Orders Processed This Month</h3>
+                        <p><%= orderCount  %></p>
                     </div>
                 </div>
                 <div class="stat-card">
                     <i class="fas fa-rupee-sign"></i>
                     <div class="stat-info">
                         <h3>This Month's Revenue</h3>
-                        <p>4,68,570</p>
+                        <p>₹<%= revenue %></p>
                     </div>
                 </div>
             </div>
         </section>
 
         <section class="activity-section">
-            <h2>Recent Activity</h2>
+            <h2>Orders This Month</h2>
             <div class="activity-list">
-                <div class="activity-item">
-                    <div class="activity-icon">
-                        <i class="fas fa-edit"></i>
-                    </div>
-                    <div class="activity-details">
-                        <h3>Updated Inventory</h3>
-                        <p>Added 50 units of Cheese Burger</p>
-                        <span class="activity-time">2 hours ago</span>
-                    </div>
-                </div>
-                <div class="activity-item">
-                    <div class="activity-icon">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <div class="activity-details">
-                        <h3>Order Processed</h3>
-                        <p>Completed order #ORD001</p>
-                        <span class="activity-time">3 hours ago</span>
-                    </div>
-                </div>
+                <% if(orders.length>1){  %>
+                    <% orders.forEach(order => { %>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="activity-details">
+                                <h3><%= order.name %></h3>
+                                <p>₹<%= order.price*order.quantity %></p>
+                                <span class="activity-time"><%= formatDate(order.date) %></span>
+                            </div>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <h2>No recent orders</h2>
+                <% } %>
             </div>
         </section>
     </main>

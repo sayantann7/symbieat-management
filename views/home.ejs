@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Management Dashboard - SymbiEat</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <nav>
+        <a href="/home" style="text-decoration: none; color: inherit">
+            <div class="logo">SymbiEat Management</div>
+        </a>
+        <div class="profile">
+            <img src="images/default-avatar.svg" alt="Profile" class="profile-img">
+            <div class="dropdown">
+                <a href="/profile" class="dropdown-item">
+                    <i class="fas fa-user"></i>
+                    Profile
+                </a>
+                <a href="/logout" class="dropdown-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="dashboard">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <i class="fas fa-clock"></i>
+                <div class="stat-info">
+                    <h3>Pending Reservations</h3>
+                    <p class="stat-value"><%= reservations.length %></p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-check-circle"></i>
+                <div class="stat-info">
+                    <h3>Orders Completed Today</h3>
+                    <p class="stat-value"><%= orderCount %></p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-rupee-sign"></i>
+                <div class="stat-info">
+                    <h3>Today's Revenue</h3>
+                    <p class="stat-value">₹<%= revenue %></p>
+                </div>
+            </div>
+        </div>
+
+        <section class="orders-section">
+            <h2 class="orders-heading">Active Orders</h2>
+            <div class="orders-grid">
+                
+            </div>
+        </section>
+
+        <section class="inventory-section">
+            <div class="section-header">
+                <h2>Inventory Management</h2>
+                <button class="add-item-btn">
+                    <i class="fas fa-plus"></i> Add New Item
+                </button>
+            </div>
+            <div class="inventory-grid">
+                <% inventory.forEach(item => { %>
+                    <div class="food-card">
+                        <div class="food-image" style="background-image: url('images/food.jpg')"></div>
+                        <div class="food-info">
+                            <h3><%= item.name %></h3>
+                            <p class="price">₹<%= item.price %></p>
+                            <div class="inventory-controls">
+                                <form action="/stock-update/<%= item._id %>" method="post">
+                                <label>Stock:</label>
+                                <div class="quantity-control">
+                                    <button type="button" class="qty-btn minus">-</button>
+                                    <input name="quantity" class="quantity" type="number" value="<%= item.quantity %>" min="0">
+                                    <button type="button" class="qty-btn plus">+</button>
+                                </div>
+                            </div>
+                            <button type="submit" class="update-btn">Update</button>
+                            </form>
+                        </div>
+                    </div>
+                <% }) %>
+                <!-- More food cards -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Add Item Popup HTML -->
+    <div class="popup-overlay" id="addItemPopup">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h2>Add New Item</h2>
+                <button class="close-popup">×</button>
+            </div>
+            <form action="/add-item" method="post" class="add-item-form" id="addItemForm">
+                <div class="form-group">
+                    <label for="itemName">Item Name</label>
+                    <input name="name" type="text" id="itemName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="itemPrice">Price (₹)</label>
+                    <input name="price" type="number" id="itemPrice" min="0" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="itemQuantity">Initial Stock</label>
+                    <input name="quantity" type="number" id="itemQuantity" min="0" required>
+                </div>
+                
+                <!-- <div class="form-group">
+                    <label for="itemImage">Image URL</label>
+                    <input type="image" id="itemImage" required>
+                    <div class="image-preview"></div>
+                </div> -->
+                
+                <!-- <div class="form-group">
+                    <label for="itemDescription">Description</label>
+                    <textarea id="itemDescription" rows="3"></textarea>
+                </div> -->
+
+                <button type="submit" class="submit-btn">Add Item</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>Made by <span>Sayantan Nandi</span> (FY CSE Student)</p>
+    </footer>
+
+    <script type="module" src="js/dashboard.js"></script>
+
+    <script>
+        // Popup functionality
+        const popup = document.getElementById('addItemPopup');
+        const addItemBtn = document.querySelector('.add-item-btn');
+        const closeBtn = document.querySelector('.close-popup');
+        const addItemForm = document.getElementById('addItemForm');
+        const imageInput = document.getElementById('itemImage');
+        const imagePreview = document.querySelector('.image-preview');
+
+        // Show popup
+        addItemBtn.addEventListener('click', () => {
+            popup.style.display = 'flex';
+        });
+
+        // Close popup
+        closeBtn.addEventListener('click', () => {
+            popup.style.display = 'none';
+        });
+
+        // Click outside to close
+        popup.addEventListener('click', (e) => {
+            if (e.target === popup) {
+                popup.style.display = 'none';
+            }
+        });
+
+        // Image preview
+        // imageInput.addEventListener('input', () => {
+        //     const url = imageInput.value;
+        //     if (url) {
+        //         imagePreview.innerHTML = `<img src="${url}" alt="Preview">`;
+        //     } else {
+        //         imagePreview.innerHTML = '';
+        //     }
+        // });
+
+    </script>
+</body>
+</html>
