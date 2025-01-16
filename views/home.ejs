@@ -68,26 +68,33 @@
                 </button>
             </div>
             <div class="inventory-grid">
-                <% inventory.forEach(item => { %>
-                    <div class="food-card">
-                        <div class="food-image" style="background-image: url('images/food.jpg')"></div>
-                        <div class="food-info">
-                            <h3><%= item.name %></h3>
-                            <p class="price">₹<%= item.price %></p>
-                            <div class="inventory-controls">
-                                <form action="/stock-update/<%= item._id %>" method="post">
-                                <label>Stock:</label>
-                                <div class="quantity-control">
-                                    <button type="button" class="qty-btn minus">-</button>
-                                    <input name="quantity" class="quantity" type="number" value="<%= item.quantity %>" min="0">
-                                    <button type="button" class="qty-btn plus">+</button>
+                <% if (inventory) { %>
+                    <% inventory.forEach(item => { %>
+                        <div class="food-card">
+                            <div class="food-image" style="background-image: url('<%= item.image %>')"></div>
+                            <div class="food-info">
+                                <h3><%= item.name %></h3>
+                                <p class="price">₹<%= item.price %></p>
+                                <div class="inventory-controls">
+                                    <form action="/stock-update/<%= item._id %>" method="post">
+                                    <label>Stock:</label>
+                                    <div class="quantity-control">
+                                        <button type="button" class="qty-btn minus">-</button>
+                                        <input name="quantity" class="quantity" type="number" value="<%= item.quantity %>" min="0">
+                                        <button type="button" class="qty-btn plus">+</button>
+                                    </div>
                                 </div>
+                                <button type="submit" class="update-btn">Update</button>
+                                </form>
+                                <form action="/delete-item/<%= item._id %>" method="POST" style="margin-top: 10px;">
+                                    <button type="submit" class="delete-btn">Delete</button>
+                                </form>
                             </div>
-                            <button type="submit" class="update-btn">Update</button>
-                            </form>
                         </div>
-                    </div>
-                <% }) %>
+                    <% }) %>
+                <% } else { %>
+                    <h2>No items in inventory</h2>
+                <% } %>
                 <!-- More food cards -->
             </div>
         </section>
@@ -101,7 +108,7 @@
                 <h2>Add New Item</h2>
                 <button class="close-popup">×</button>
             </div>
-            <form action="/add-item" method="post" class="add-item-form" id="addItemForm">
+            <form action="/add-item" method="post" class="add-item-form" id="addItemForm" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="itemName">Item Name</label>
                     <input name="name" type="text" id="itemName" required>
@@ -117,11 +124,11 @@
                     <input name="quantity" type="number" id="itemQuantity" min="0" required>
                 </div>
                 
-                <!-- <div class="form-group">
-                    <label for="itemImage">Image URL</label>
-                    <input type="image" id="itemImage" required>
+                <div class="form-group">
+                    <label for="itemImage">Food Image</label>
+                    <input type="file" id="itemImage" name="image" accept="image/*" required>
                     <div class="image-preview"></div>
-                </div> -->
+                </div>
                 
                 <!-- <div class="form-group">
                     <label for="itemDescription">Description</label>
@@ -166,14 +173,19 @@
         });
 
         // Image preview
-        // imageInput.addEventListener('input', () => {
-        //     const url = imageInput.value;
-        //     if (url) {
-        //         imagePreview.innerHTML = `<img src="${url}" alt="Preview">`;
-        //     } else {
-        //         imagePreview.innerHTML = '';
-        //     }
-        // });
+        imageInput.addEventListener('change', () => {
+        const file = imageInput.files[0];
+        if (file) {
+            console.log(file);
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                imagePreview.innerHTML = `<img src="${e.target.result}" alt="Preview";">`;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            imagePreview.innerHTML = '';
+        }
+    });
 
     </script>
 </body>
