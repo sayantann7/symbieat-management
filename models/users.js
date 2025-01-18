@@ -1,3 +1,4 @@
+const { max } = require('moment');
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
@@ -11,12 +12,18 @@ const userSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  phoneNumber: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+    maxlength: 13
+  },
   email: {
     type: String,
     required: true,
-    unique: true,
     trim: true,
-    lowercase: true
+    unique: true
   },
   password: {
     type: String,
