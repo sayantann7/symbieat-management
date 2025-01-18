@@ -9,6 +9,7 @@ const studentUserModel = require("./models/users");
 const inventoryModel = require("./models/inventory");
 const reservationModel = require("./models/reservations");
 const orderModel = require("./models/orders");
+const notificationModel = require("./models/notifications");
 const localStrategy = require("passport-local");
 const session = require("session");
 const expressSession = require("express-session");
@@ -18,6 +19,11 @@ const flash = require("connect-flash");
 const multer = require("multer");
 const sharp = require("sharp");
 require("dotenv").config();
+const twilio = require("twilio");
+const client = new twilio(
+  process.env.TWILIO_ACCOUNT_SID,
+  process.env.TWILIO_AUTH_TOKEN
+);
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -101,6 +107,31 @@ app.post("/add-item", upload.single("image"), async (req, res) => {
     });
 
     await inventory.save();
+
+    const notificationData = await notificationModel.find({}).populate("user");
+    notificationData.forEach(async (notification) => {
+      const foodItem = inventory.foodItems.find(
+        (item) => item._id === notification.foodItemID
+      );
+      const available = foodItem.quantity > 0 ? true : false;
+      if (available) {
+        client.messages
+          .create({
+            body: `As per your request, ${foodItem.name} is now available in our inventory.`,
+            from: process.env.TWILIO_PHONE_NUMBER,
+            to: user.phoneNumber,
+          })
+          .then((message) => {
+            console.log(`Message sent: ${message.sid}`);
+          })
+          .catch((error) => {
+            console.error("Error sending SMS:", error);
+            res.status(500).send("Internal Server Error");
+          });
+        notificationData.pull({ _id: notification._id });
+        await notificationData.save();
+      }
+    });
     res.redirect("/home");
   } catch (err) {
     console.error("Error adding item:", err);
@@ -293,6 +324,26 @@ app.post("/stock-update/:foodId", isLoggedIn, async (req, res) => {
   );
   foodItem.quantity = req.body.quantity;
   await inventory.save();
+
+  const notificationData = await notificationModel.find({}).populate("user");
+  notificationData.forEach(async (notification) => {
+    const foodItem = inventory.foodItems[notification.foodItemID];
+    const available = foodItem.quantity > 0 ? true : false;
+    if (available) {
+      client.messages.create({
+        body: `As per your request, ${foodItem.name} is now available in our inventory.`,
+        from: process.env.TWILIO_PHONE_NUMBER,
+        to: notification.user.phoneNumber
+      }).then(message => {
+        console.log(`Message sent: ${message.sid}`);
+      }).catch(error => {
+        console.error("Error sending SMS:", error);
+      });
+      const deletedNotification = await notificationModel.deleteOne({
+        _id: notification._id,
+      });
+    }
+  });
   res.redirect("/home");
 });
 
