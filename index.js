@@ -110,26 +110,21 @@ app.post("/add-item", upload.single("image"), async (req, res) => {
 
     const notificationData = await notificationModel.find({}).populate("user");
     notificationData.forEach(async (notification) => {
-      const foodItem = inventory.foodItems.find(
-        (item) => item._id === notification.foodItemID
-      );
+      const foodItem = inventory.foodItems[notification.foodItemID];
       const available = foodItem.quantity > 0 ? true : false;
       if (available) {
-        client.messages
-          .create({
-            body: `As per your request, ${foodItem.name} is now available in our inventory.`,
-            from: process.env.TWILIO_PHONE_NUMBER,
-            to: user.phoneNumber,
-          })
-          .then((message) => {
-            console.log(`Message sent: ${message.sid}`);
-          })
-          .catch((error) => {
-            console.error("Error sending SMS:", error);
-            res.status(500).send("Internal Server Error");
-          });
-        notificationData.pull({ _id: notification._id });
-        await notificationData.save();
+        client.messages.create({
+          body: `As per your request, ${foodItem.name} is now available in our inventory.`,
+          from: process.env.TWILIO_PHONE_NUMBER,
+          to: notification.user.phoneNumber
+        }).then(message => {
+          console.log(`Message sent: ${message.sid}`);
+        }).catch(error => {
+          console.error("Error sending SMS:", error);
+        });
+        const deletedNotification = await notificationModel.deleteOne({
+          _id: notification._id,
+        });
       }
     });
     res.redirect("/home");
