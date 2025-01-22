@@ -20,6 +20,7 @@ const multer = require("multer");
 const sharp = require("sharp");
 require("dotenv").config();
 const twilio = require("twilio");
+const MongoStore = require("connect-mongo");
 const client = new twilio(
   process.env.TWILIO_ACCOUNT_SID,
   process.env.TWILIO_AUTH_TOKEN
@@ -31,11 +32,29 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(express.urlencoded({ extended: true }));
 
+const mongoURI = process.env.MONGODB_URI;
+
+mongoose
+  .connect(mongoURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("Connected to MongoDB");
+  })
+  .catch((err) => {
+    console.error("Error connecting to MongoDB:", err);
+  });
+
 app.use(
   expressSession({
     secret: "bcubwufe",
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: mongoURI,
+      collectionName: 'sessions'
+    })
   })
 );
 app.use(passport.initialize());
@@ -52,20 +71,6 @@ app.use((req, res, next) => {
   res.locals.error = req.flash("error");
   next();
 });
-
-const mongoURI = process.env.MONGODB_URI;
-
-mongoose
-  .connect(mongoURI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log("Connected to MongoDB");
-  })
-  .catch((err) => {
-    console.error("Error connecting to MongoDB:", err);
-  });
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
