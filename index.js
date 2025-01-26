@@ -169,6 +169,33 @@ app.post("/delete-item/:foodId", isLoggedIn, async (req, res) => {
   res.redirect("/home");
 });
 
+app.post("/bulk-stock-update", isLoggedIn, async (req, res) => {
+  try {
+      const inventory = await inventoryModel.findOne({});
+      const updates = Object.keys(req.body).filter(key => key.startsWith('quantity_')).map(key => {
+          const id = key.split('_')[1];
+          return {
+              id,
+              quantity: req.body[key],
+              changed: req.body[`changed_${id}`] === 'true'
+          };
+      }).filter(item => item.changed);
+
+      updates.forEach(update => {
+          const foodItem = inventory.foodItems.id(update.id);
+          if (foodItem) {
+              foodItem.quantity = update.quantity;
+          }
+      });
+
+      await inventory.save();
+      res.redirect("/home");
+  } catch (err) {
+      console.error("Error updating stock:", err);
+      res.status(500).send("Internal Server Error");
+  }
+});
+
 app.post("/register", (req, res) => {
   let userData = new userModel({
     username: req.body.username,
@@ -218,7 +245,7 @@ app.get("/api/food", isLoggedIn, async (req, res) => {
 });
 
 app.get("/api/reservations", isLoggedIn, async (req, res) => {
-  const reservations = await reservationModel.find({});
+  const reservations = await reservationModel.find({}).populate("user");
   res.json(reservations);
 });
 
@@ -242,7 +269,7 @@ app.get("/home", isLoggedIn, async (req, res) => {
   });
   revenue = revenue.toLocaleString("en-IN");
   const orderCount = orders.length.toLocaleString("en-IN");
-  const reservations = await reservationModel.find({});
+  const reservations = await reservationModel.find({}).populate("user");
   res.render("home", {
     inventory: inventory != null ? inventory.foodItems : null,
     reservations: reservations,

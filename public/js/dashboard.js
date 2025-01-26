@@ -1,3 +1,27 @@
+
+document.getElementById('updateStockBtn').addEventListener('click', () => {
+  document.getElementById('inventoryForm').submit();
+});
+
+document.querySelectorAll('.qty-btn').forEach(button => {
+  button.addEventListener('click', function() {
+      const id = this.getAttribute('data-id');
+      const quantityInput = document.querySelector(`input[name="quantity_${id}"]`);
+      const changedInput = document.querySelector(`input[name="changed_${id}"]`);
+
+      changedInput.value = 'true';
+  });
+});
+
+document.querySelectorAll('.quantity').forEach(input => {
+  input.addEventListener('input', function() {
+      const id = this.getAttribute('data-id');
+      const changedInput = document.querySelector(`input[name="changed_${id}"]`);
+      changedInput.value = 'true';
+  });
+});
+
+
 function formatTimeLeft(milliseconds) {
     const minutes = Math.floor(milliseconds / (1000 * 60));
     const seconds = Math.floor((milliseconds % (1000 * 60)) / 1000);
@@ -38,7 +62,7 @@ async function initialOrderUpdate() {
               <img src="images/food.jpg" alt="Pizza">
               <div class="item-details">
                   <h4>${order.name}</h4>
-                  <p>${order.quantity} pc</p>
+                  <p>${order.quantity} pc for ${order.user.fullName}</p>
               </div>
               <span class="item-price">₹${order.quantity*order.price}</span>
           </div>

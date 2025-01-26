@@ -60,43 +60,48 @@
             </div>
         </section>
 
+
         <section class="inventory-section">
             <div class="section-header">
                 <h2>Inventory Management</h2>
-                <button class="add-item-btn">
-                    <i class="fas fa-plus"></i> Add New Item
-                </button>
+                <div class="header-buttons">
+                    <button class="add-item-btn">
+                        <i class="fas fa-plus"></i> Add New Item
+                    </button>
+                    <button class="add-item-btn" id="updateStockBtn">
+                        <i class="fas fa-check-circle"></i> Update Stock
+                    </button>
+                </div>
             </div>
-            <div class="inventory-grid">
-                <% if (inventory) { %>
-                    <% inventory.forEach(item => { %>
-                        <div class="food-card">
-                            <div class="food-image" style="background-image: url('<%= item.image %>')"></div>
-                            <div class="food-info">
-                                <h3><%= item.name %></h3>
-                                <p class="price">₹<%= item.price %></p>
-                                <div class="inventory-controls">
-                                    <form action="/stock-update/<%= item._id %>" method="post">
-                                    <label>Stock:</label>
-                                    <div class="quantity-control">
-                                        <button type="button" class="qty-btn minus">-</button>
-                                        <input name="quantity" class="quantity" type="number" value="<%= item.quantity %>" min="0">
-                                        <button type="button" class="qty-btn plus">+</button>
+            <form id="inventoryForm" action="/bulk-stock-update" method="post">
+                <div class="inventory-grid">
+                    <% if (inventory) { %>
+                        <% inventory.forEach(item => { %>
+                            <div class="food-card">
+                                <div class="food-image" style="background-image: url('<%= item.image %>')"></div>
+                                <div class="food-info">
+                                    <h3><%= item.name %></h3>
+                                    <p class="price">₹<%= item.price %></p>
+                                    <div class="inventory-controls">
+                                        <label>Stock:</label>
+                                        <div class="quantity-control">
+                                            <button type="button" class="qty-btn minus" data-id="<%= item._id %>">-</button>
+                                            <input name="quantity_<%= item._id %>" class="quantity" type="number" value="<%= item.quantity %>" min="0" data-id="<%= item._id %>">
+                                            <button type="button" class="qty-btn plus" data-id="<%= item._id %>">+</button>
+                                            <input type="hidden" name="changed_<%= item._id %>" value="false" class="changed-input">
+                                        </div>
                                     </div>
+                                    <form action="/delete-item/<%= item._id %>" method="POST" style="margin-top: 10px;">
+                                        <button type="submit" class="delete-btn">Delete</button>
+                                    </form>
                                 </div>
-                                <button type="submit" class="update-btn">Update</button>
-                                </form>
-                                <form action="/delete-item/<%= item._id %>" method="POST" style="margin-top: 10px;">
-                                    <button type="submit" class="delete-btn">Delete</button>
-                                </form>
                             </div>
-                        </div>
-                    <% }) %>
-                <% } else { %>
-                    <h2>No items in inventory</h2>
-                <% } %>
-                <!-- More food cards -->
-            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <h2>No items in inventory</h2>
+                    <% } %>
+                </div>
+            </form>
         </section>
 
     </main>
